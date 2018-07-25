@@ -52,6 +52,7 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+  (add-to-list 'exec-path "/usr/local/bin")
 
 #+END_SRC
 
@@ -142,12 +143,15 @@
 ** Projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
 
+  (use-package ag)
+
   (use-package projectile
     :config
     (projectile-mode)
     :bind
     (("s-p" . 'projectile-switch-project)
-     ("s-f" . 'projectile-find-file)))
+     ("s-f" . 'projectile-find-file)
+     ("s-g" . 'projectile-ag)))
 
 #+END_SRC
 ** Window switching
