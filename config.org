@@ -1,4 +1,4 @@
-
+#+Title: Emacs Configuration
 * Package management
 
 #+BEGIN_SRC emacs-lisp :tangle yes
