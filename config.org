@@ -1,0 +1,265 @@
+
+* Package management
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+			   ("melpa-stable" . "https://stable.melpa.org/packages/")
+			   ("melpa" . "https://melpa.org/packages/")
+			   ("org" . "https://orgmode.org/elpa/")))
+
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+  (use-package delight :ensure t)
+  (use-package diminish :ensure t)
+  (use-package use-package-ensure-system-package :ensure t)
+
+#+END_SRC
+
+* General settings
+** Defaults
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (setq
+   ad-redefinition-action 'accept                   ; Silence warnings for redefinition
+   cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
+   display-time-default-load-average nil            ; Don't display load average
+   fill-column 80                                   ; Set width for automatic line breaks
+   help-window-select t                             ; Focus new help windows when opened
+   inhibit-startup-screen t                         ; Disable start-up screen
+   initial-scratch-message ""                       ; Empty the initial *scratch* buffer
+   load-prefer-newer t                              ; Prefers the newest version of a file
+   ring-bell-function 'ignore                       ; Turn off annoying bell
+   scroll-conservatively most-positive-fixnum       ; Always scroll by one line
+   select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
+   tab-width 4                                      ; Set width for tabs 
+   use-package-always-ensure t                      ; Avoid the :ensure keyword for each package 
+   vc-follow-symlinks t)                            ; Always follow the symlinks
+  (cd "~/")                                         ; Move to the user directory 
+  (column-number-mode 1)                            ; Show the column number
+  (display-time-mode 1)                             ; Enable time in the mode-line
+  (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
+  (global-hl-line-mode)                             ; Hightlight current line
+  (show-paren-mode 1)                               ; Show the parent
+  (add-to-list 'exec-path "/usr/local/bin")         ; Ensure brew path is found
+
+#+END_SRC
+
+** Env and execution path
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+
+#+END_SRC
+
+** Global keybindings
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (global-set-key (kbd "C-c q") 'join-line)
+  (global-set-key (kbd "RET") 'newline-and-indent)
+
+#+END_SRC
+** Customization
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+      (load custom-file t))
+
+#+END_SRC
+
+** Theme
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package solarized-theme
+    :config 
+    (load-theme 'solarized-dark))
+
+#+END_SRC
+
+** GUI
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (when window-system
+    (menu-bar-mode -1)                              ; Disable the menu bar
+    (scroll-bar-mode -1)                            ; Disable the scroll bar
+    (tool-bar-mode -1)                              ; Disable the tool bar
+    (tooltip-mode -1)                               ; Disable the tooltips
+    (toggle-frame-maximized))                       ; Maximise frame
+
+#+END_SRC
+* Utilities
+** Aggressive Indent
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package aggressive-indent
+    :defer 2
+    :hook (
+	   (emacs-lisp-mode . aggressive-indent-mode)
+	   (clojure-mode . aggressive-indent-mode)
+	   )
+    :custom (aggressive-indent-comments-too))
+
+#+END_SRC
+** Git
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package magit
+    :bind ("C-c g" . magit-status))
+
+#+END_SRC
+** Parentheses
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package paredit
+    :hook ((org-mode
+	    emacs-lisp-mode
+	    clojure-mode
+	    cider-repl-mode)
+	   . paredit-mode)
+    :bind (:map paredit-mode-map
+		("M-[" . paredit-wrap-square)
+		("M-{" . paredit-wrap-curly)))
+
+  (use-package paxedit
+    :hook ((org-mode
+	    emacs-lisp-mode
+	    clojure-mode
+	    cider-repl-mode)
+	   . paxedit-mode)
+    :bind (:map paxedit-mode-map
+		("M-t" . 'paxedit-transpose-forward)
+		("C-M-t" . 'paxedit-transpose-backward)))
+
+#+END_SRC
+** Projectile
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package projectile
+    :config
+    (projectile-mode)
+    :bind
+    (("s-p" . 'projectile-switch-project)
+     ("s-f" . 'projectile-find-file)))
+
+#+END_SRC
+** Window switching
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package winum
+    :init
+    (setq winum-keymap
+	  (let ((map (make-sparse-keymap)))
+	    (define-key map (kbd "M-0") 'winum-select-window-0-or-10)
+	    (define-key map (kbd "M-1") 'winum-select-window-1)
+	    (define-key map (kbd "M-2") 'winum-select-window-2)
+	    (define-key map (kbd "M-3") 'winum-select-window-3)
+	    (define-key map (kbd "M-4") 'winum-select-window-4)
+	    (define-key map (kbd "M-5") 'winum-select-window-5)
+	    (define-key map (kbd "M-6") 'winum-select-window-6)
+	    (define-key map (kbd "M-7") 'winum-select-window-7)
+	    (define-key map (kbd "M-8") 'winum-select-window-8)
+	    (define-key map (kbd "M-9") 'winum-select-window-9)
+	    map))
+    :config
+    (winum-mode))
+
+#+END_SRC
+* Languages
+** Clojure
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package clojure-mode
+    :mode "\\.clj'"
+    :config
+    (define-clojure-indent
+      ;; Compojure
+      (GET 'defun)
+      (cj/GET 'defun)
+      (cj/context 'defun)))
+
+  (use-package cider
+    :pin melpa-stable)
+
+  ;; (use-package clj-refactor
+  ;;   :config
+  ;;   (cljr-add-keybindings-with-prefix "C-c C-r")
+  ;;   :hook
+  ;;   clojure-mode)
+
+#+END_SRC
+** Emacs Lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package elisp-mode
+    :ensure nil
+    :delight emacs-lisp-mode "ξ")
+
+#+END_SRC
+* Org Mode
+
+** General config
+*** Compile on change
+
+First we define a function for recompiling our config when it changes:
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package async)
+
+  (defvar *config-file* (expand-file-name "config.org" user-emacs-directory)
+    "The configuration file.")
+
+  (defvar *config-last-change* (nth 5 (file-attributes *config-file*))
+    "Last modification time of the configuration file.")
+
+  (defvar *show-async-tangle-results* nil
+    "Keeps *emacs* async buffers around for later inspection.")
+
+  (defun my/config-updated ()
+    "Checks if the configuration file has been updated since the last time."
+    (time-less-p *config-last-change*
+		 (nth 5 (file-attributes *config-file*))))
+
+  (defun my/config-tangle ()
+    "Tangles the org file asynchronously."
+    (when (my/config-updated)
+      (setq *config-last-change*
+	    (nth 5 (file-attributes *config-file*)))
+      (my/async-babel-tangle *config-file*)))
+
+  (defun my/async-babel-tangle (org-file)
+    "Tangles the org file asynchronously."
+    (let ((init-tangle-start-time (current-time))
+	  (file (buffer-file-name))
+	  (async-quiet-switch "-q"))
+      (async-start
+       `(lambda ()
+	  (require 'org)
+	  (org-babel-tangle-file ,org-file))
+       (unless *show-async-tangle-results*
+	 `(lambda (result)
+	    (if result
+		(message "SUCCESS: %s successfully tangled (%.2fs)."
+			 ,org-file
+			 (float-time (time-subtract (current-time)
+						    ',init-tangle-start-time)))
+	      (message "ERROR: %s as tangle failed." ,org-file)))))))
+
+#+END_SRC
+
+*** Org setup
+
+#+BEGIN_SRC  emacs-lisp :tangle yes
+
+  (use-package org
+    :ensure org-plus-contrib
+    :hook (after-save . my/config-tangle))
+
+#+END_SRC

@@ -1,0 +1,7 @@
+/auto-save-list
+config.el
+custom.el
+/network-security.data
+/projectile-bookmarks.eld
+*~
+/elpa/**
