@@ -44,7 +44,7 @@
   (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
   (global-hl-line-mode)                             ; Hightlight current line
   (show-paren-mode 1)                               ; Show the parent
-  (add-to-list 'exec-path "/usr/local/bin")         ; Ensure brew path is found
+  (global-linum-mode)                               ; Show line numbers
 
 #+END_SRC
 
@@ -101,12 +101,25 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (use-package aggressive-indent
+    :delight
     :defer 2
     :hook (
 	   (emacs-lisp-mode . aggressive-indent-mode)
 	   (clojure-mode . aggressive-indent-mode)
 	   )
     :custom (aggressive-indent-comments-too))
+
+#+END_SRC
+** Auto-complete
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package company
+    :defer 2
+    :diminish
+    :config
+    (global-company-mode)
+    (setq company-idle-delay nil)
+    (global-set-key (kbd "TAB") 'company-indent-or-complete-common))
 
 #+END_SRC
 ** Git
@@ -120,6 +133,7 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (use-package paredit
+    :delight
     :hook ((org-mode
 	    emacs-lisp-mode
 	    clojure-mode
@@ -130,6 +144,7 @@
 		("M-{" . paredit-wrap-curly)))
 
   (use-package paxedit
+    :delight
     :hook ((org-mode
 	    emacs-lisp-mode
 	    clojure-mode
@@ -146,6 +161,7 @@
   (use-package ag)
 
   (use-package projectile
+    :delight
     :config
     (projectile-mode)
     :bind
@@ -190,7 +206,10 @@
       (cj/context 'defun)))
 
   (use-package cider
-    :pin melpa-stable)
+    :pin melpa-stable
+    :config
+    (setq
+     cider-use-fringe-indicators nil))
 
   ;; (use-package clj-refactor
   ;;   :config
@@ -265,6 +284,7 @@ First we define a function for recompiling our config when it changes:
 
   (use-package org
     :ensure org-plus-contrib
-    :hook (after-save . my/config-tangle))
+    :hook
+    ((after-save . my/config-tangle)))
 
 #+END_SRC
