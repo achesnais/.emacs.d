@@ -77,9 +77,9 @@
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-  (use-package solarized-theme
+  (use-package dracula-theme
     :config 
-    (load-theme 'solarized-dark))
+    (load-theme 'dracula))
 
 #+END_SRC
 
