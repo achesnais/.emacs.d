@@ -45,7 +45,8 @@
   (global-hl-line-mode)                             ; Hightlight current line
   (show-paren-mode 1)                               ; Show the parent
   (global-linum-mode)                               ; Show line numbers
-
+  (delete-selection-mode)                           ; Replace selection on paste
+  (delight 'autorevert-mode nil)                    ; Hide auto-revert-mode symbol
 #+END_SRC
 
 ** Env and execution path
@@ -77,9 +78,9 @@
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-  (use-package dracula-theme
+  (use-package doom-themes
     :config 
-    (load-theme 'dracula))
+    (load-theme 'doom-one))
 
 #+END_SRC
 
@@ -107,7 +108,9 @@
 	   (emacs-lisp-mode . aggressive-indent-mode)
 	   (clojure-mode . aggressive-indent-mode)
 	   )
-    :custom (aggressive-indent-comments-too))
+    :custom (aggressive-indent-comments-too)
+    :config
+    (unbind-key "C-c C-q" aggressive-indent-mode-map))
 
 #+END_SRC
 ** Auto-complete
@@ -138,6 +141,7 @@
     (ivy-mode))
 
   (use-package counsel
+    :diminish
     :after ivy
     :config (counsel-mode))
 
@@ -217,7 +221,9 @@
       ;; Compojure
       (GET 'defun)
       (cj/GET 'defun)
-      (cj/context 'defun)))
+      (cj/context 'defun))
+    :bind
+    ("C-c C-q" . cider-quit))
 
   (use-package cider
     :pin melpa-stable

@@ -5,3 +5,4 @@ custom.el
 /projectile-bookmarks.eld
 *~
 /elpa/**
+/projectile.cache
