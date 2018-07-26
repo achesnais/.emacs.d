@@ -129,6 +129,19 @@
     :bind ("C-c g" . magit-status))
 
 #+END_SRC
+** Menus
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package ivy
+    :diminish
+    :config
+    (ivy-mode))
+
+  (use-package counsel
+    :after ivy
+    :config (counsel-mode))
+
+#+END_SRC
 ** Parentheses
 #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -199,6 +212,7 @@
   (use-package clojure-mode
     :mode "\\.clj'"
     :config
+    (setq clojure-align-forms-automatically t)
     (define-clojure-indent
       ;; Compojure
       (GET 'defun)
