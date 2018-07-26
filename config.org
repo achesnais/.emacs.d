@@ -46,7 +46,6 @@
   (show-paren-mode 1)                               ; Show the parent
   (global-linum-mode)                               ; Show line numbers
   (delete-selection-mode)                           ; Replace selection on paste
-  (delight 'autorevert-mode nil)                    ; Hide auto-revert-mode symbol
 #+END_SRC
 
 ** Env and execution path
@@ -129,7 +128,10 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (use-package magit
-    :bind ("C-c g" . magit-status))
+    :bind ("C-c g" . magit-status)
+    :delight
+    (magit-auto-revert-mode)
+    (auto-revert-mode))
 
 #+END_SRC
 ** Menus
