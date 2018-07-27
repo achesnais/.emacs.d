@@ -36,16 +36,19 @@
    ring-bell-function 'ignore                       ; Turn off annoying bell
    scroll-conservatively most-positive-fixnum       ; Always scroll by one line
    select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
-   tab-width 4                                      ; Set width for tabs 
-   use-package-always-ensure t                      ; Avoid the :ensure keyword for each package 
+   tab-width 4                                      ; Set width for tabs
+   use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
    vc-follow-symlinks t)                            ; Always follow the symlinks
-  (cd "~/")                                         ; Move to the user directory 
-  (column-number-mode 1)                            ; Show the column number 
+  (cd "~/")                                         ; Move to the user directory
+  (column-number-mode 1)                            ; Show the column number
   (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
   (global-hl-line-mode)                             ; Hightlight current line
   (show-paren-mode 1)                               ; Show the parent
   (global-linum-mode)                               ; Show line numbers
   (delete-selection-mode)                           ; Replace selection on paste
+
+  ; Remove trailing whitespace
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+END_SRC
 
 ** Env and execution path
@@ -78,7 +81,7 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (use-package doom-themes
-    :config 
+    :config
     (load-theme 'doom-one))
 
 #+END_SRC
