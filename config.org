@@ -1,3 +1,4 @@
+
 #+Title: Emacs Configuration
 * Package management
 
@@ -199,6 +200,17 @@
      ("s-g" . 'projectile-ag)))
 
 #+END_SRC
+** Yasnippet
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package yasnippet
+    :delight
+    (yas-global-mode)
+    (yas-minor-mode)
+    :config
+    (yas-global-mode 1))
+
+#+END_SRC
 ** Window switching
 #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -241,13 +253,24 @@
     :pin melpa-stable
     :config
     (setq
-     cider-use-fringe-indicators nil))
+     cider-use-fringe-indicators nil
+     cider-repl-pop-to-buffer-on-connect 'display-only))
 
-  ;; (use-package clj-refactor
-  ;;   :config
-  ;;   (cljr-add-keybindings-with-prefix "C-c C-r")
-  ;;   :hook
-  ;;   clojure-mode)
+  (use-package multiple-cursors)
+  (use-package edn)
+  (use-package sgml-mode)
+  (use-package inflections)
+  (use-package hydra)
+  (use-package subword)
+
+  (use-package clj-refactor
+    :load-path "local"
+    :after (clojure-mode yasnippet)
+    :config
+    (cljr-add-keybindings-with-prefix "C-c C-r")
+    :hook
+    (clj-refactor-mode . yas-minor-mode)
+    (clojure-mode . clj-refactor-mode))
 
 #+END_SRC
 ** Emacs Lisp
