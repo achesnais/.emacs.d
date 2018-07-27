@@ -39,8 +39,7 @@
    use-package-always-ensure t                      ; Avoid the :ensure keyword for each package 
    vc-follow-symlinks t)                            ; Always follow the symlinks
   (cd "~/")                                         ; Move to the user directory 
-  (column-number-mode 1)                            ; Show the column number
-  (display-time-mode 1)                             ; Enable time in the mode-line
+  (column-number-mode 1)                            ; Show the column number 
   (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
   (global-hl-line-mode)                             ; Hightlight current line
   (show-paren-mode 1)                               ; Show the parent
@@ -120,8 +119,19 @@
     :diminish
     :config
     (global-company-mode)
-    (setq company-idle-delay nil)
-    (global-set-key (kbd "TAB") 'company-indent-or-complete-common))
+    :bind
+    ("TAB" . 'company-indent-or-complete-common))
+
+#+END_SRC
+** Fuzzy ido
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package flx-ido
+    :config
+    (flx-ido-mode 1)
+    (setq
+     ido-use-faces nil
+     ido-enable-flex-matching t))
 
 #+END_SRC
 ** Git
