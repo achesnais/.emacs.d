@@ -33,6 +33,7 @@
    inhibit-startup-screen t                         ; Disable start-up screen
    initial-scratch-message ""                       ; Empty the initial *scratch* buffer
    load-prefer-newer t                              ; Prefers the newest version of a file
+   make-backup-files nil                            ; Turn off backup
    ring-bell-function 'ignore                       ; Turn off annoying bell
    scroll-conservatively most-positive-fixnum       ; Always scroll by one line
    select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
@@ -126,6 +127,10 @@
     :bind
     ("TAB" . 'company-indent-or-complete-common))
 
+#+END_SRC
+** Better M-x
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smex)
 #+END_SRC
 ** Fuzzy ido
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -343,6 +348,18 @@ First we define a function for recompiling our config when it changes:
   (use-package org
     :ensure org-plus-contrib
     :hook
-    ((after-save . my/config-tangle)))
+    ((before-save . (lambda ()
+		      (interactive)
+		      (org-table-recalculate-buffer-tables)))
+     (after-save . my/config-tangle)))
+#+END_SRC
+* Misc Modes
+** Ledger Mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package ledger-mode
+    :hook
+    (ledger-mode . aggressive-indent-mode)
+    )
 
 #+END_SRC
