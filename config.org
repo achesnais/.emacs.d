@@ -107,27 +107,25 @@
   (use-package aggressive-indent
     :delight
     :defer 2
-    :hook (
-	   (emacs-lisp-mode . aggressive-indent-mode)
-	   (clojure-mode . aggressive-indent-mode)
-	   )
+    :hook ((
+	    emacs-lisp-mode
+	    clojure-mode
+	    ) . aggressive-indent-mode)
     :custom (aggressive-indent-comments-too)
     :config
     (unbind-key "C-c C-q" aggressive-indent-mode-map))
-
 #+END_SRC
 ** Auto-complete
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-  (use-package company
+(use-package company
     :defer 2
     :diminish
     :config
     (global-company-mode)
     :bind
-    ("TAB" . 'company-indent-or-complete-common))
-
-#+END_SRC
+    ("TAB" . #'company-indent-or-complete-common))
+    #+END_SRC
 ** Better M-x
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smex)
@@ -169,14 +167,13 @@
 #+END_SRC
 ** Parentheses
 #+BEGIN_SRC emacs-lisp :tangle yes
-
   (use-package paredit
     :delight
     :hook ((org-mode
 	    emacs-lisp-mode
 	    clojure-mode
-	    cider-repl-mode)
-	   . paredit-mode)
+	    cider-repl-mode
+	    racket-mode) . paredit-mode)
     :bind (:map paredit-mode-map
 		("M-[" . paredit-wrap-square)
 		("M-{" . paredit-wrap-curly)))
@@ -186,27 +183,26 @@
     :hook ((org-mode
 	    emacs-lisp-mode
 	    clojure-mode
-	    cider-repl-mode)
-	   . paxedit-mode)
+	    cider-repl-mode
+	    racket-mode) . paxedit-mode)
     :bind (:map paxedit-mode-map
 		("M-t" . 'paxedit-transpose-forward)
 		("C-M-t" . 'paxedit-transpose-backward)))
-
 #+END_SRC
 ** Projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
-
   (use-package ag)
 
   (use-package projectile
     :delight
+    :init
+    (setq projectile-keymap-prefix (kbd "C-c p"))
     :config
-    (projectile-mode)
+    (projectile-global-mode)
     :bind
     (("s-p" . 'projectile-switch-project)
      ("s-f" . 'projectile-find-file)
      ("s-g" . 'projectile-ag)))
-
 #+END_SRC
 ** Yasnippet
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -246,7 +242,7 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   (use-package clojure-mode
-    :mode "\\.clj'"
+    :mode "\\.clj\\'"
     :config
     (setq clojure-align-forms-automatically t)
     (define-clojure-indent
@@ -288,6 +284,14 @@
     :ensure nil
     :delight emacs-lisp-mode "ξ")
 
+#+END_SRC
+** Racket
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package racket-mode
+    :mode "\\.rkt\\'"
+    :hook
+    (racket-mode . (lambda ()
+		     (company-mode 0))))
 #+END_SRC
 * Org Mode
 
@@ -351,7 +355,14 @@ First we define a function for recompiling our config when it changes:
     ((before-save . (lambda ()
 		      (interactive)
 		      (org-table-recalculate-buffer-tables)))
-     (after-save . my/config-tangle)))
+     (after-save . my/config-tangle))
+    :config
+    (setq org-capture-templates
+	  '(
+	    ("j" "Journal Entry"
+	     entry (file+datetree "~/Google Drive/Notebook/journal.org")
+	     "* %?p"
+	     :empty-lines 1))))
 #+END_SRC
 * Misc Modes
 ** Ledger Mode

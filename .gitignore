@@ -7,3 +7,5 @@ custom.el
 /elpa/**
 /projectile.cache
 /.mc-lists.el
+/smex-items
+/bookmarks
