@@ -260,15 +260,7 @@
      cider-use-fringe-indicators nil
      cider-repl-pop-to-buffer-on-connect 'display-only))
 
-  (use-package multiple-cursors)
-  (use-package edn)
-  (use-package sgml-mode)
-  (use-package inflections)
-  (use-package hydra)
-  (use-package subword)
-
   (use-package clj-refactor
-    :load-path "local"
     :after (clojure-mode yasnippet)
     :config
     (cljr-add-keybindings-with-prefix "C-c C-r")
