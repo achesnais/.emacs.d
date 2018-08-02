@@ -261,13 +261,13 @@
      cider-repl-pop-to-buffer-on-connect 'display-only))
 
   (use-package clj-refactor
+    :delight
     :after (clojure-mode yasnippet)
     :config
     (cljr-add-keybindings-with-prefix "C-c C-r")
     :hook
     (clj-refactor-mode . yas-minor-mode)
     (clojure-mode . clj-refactor-mode))
-
 #+END_SRC
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp :tangle yes
