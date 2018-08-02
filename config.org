@@ -150,6 +150,9 @@
     (magit-auto-revert-mode)
     (auto-revert-mode))
 
+  (use-package browse-at-remote
+    :defer 2
+    :bind ("s-r" . browse-at-remote))
 #+END_SRC
 ** Menus
 #+BEGIN_SRC emacs-lisp :tangle yes
