@@ -258,6 +258,8 @@
 
   (use-package cider
     :pin melpa-stable
+    :hook
+    (cider-mode . eldoc-mode)
     :config
     (setq
      cider-use-fringe-indicators nil
