@@ -160,13 +160,13 @@
   (use-package ivy
     :diminish
     :config
-    (ivy-mode))
+    (ivy-mode)
+    (setq ivy-initial-inputs-alist nil))
 
   (use-package counsel
     :diminish
     :after ivy
     :config (counsel-mode))
-
 #+END_SRC
 ** Parentheses
 #+BEGIN_SRC emacs-lisp :tangle yes
