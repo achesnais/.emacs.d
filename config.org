@@ -262,7 +262,14 @@
       (POST       'defun)
       (cj/GET     'defun)
       (cj/context 'defun)
-      (tufte/p    'defun))
+      ;; Tufte
+      (tufte/p    'defun)
+      (tufte/profile 'defun)
+      (tufte/profiled 'defun)
+      ;; Datomic
+      (or-join 'defun)
+      (not-join 'defun)
+      )
     :bind
     ("C-c C-q" . cider-quit))
 
