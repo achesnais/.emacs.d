@@ -148,9 +148,7 @@
 #+END_SRC
 ** Git
 #+BEGIN_SRC emacs-lisp :tangle yes
-
   (use-package magit
-    :bind ("C-c g" . magit-status)
     :delight
     (magit-auto-revert-mode)
     (auto-revert-mode))
@@ -283,6 +281,7 @@
      cider-repl-pop-to-buffer-on-connect 'display-only))
 
   (use-package clj-refactor
+    :pin melpa-stable
     :delight
     :after (clojure-mode yasnippet)
     :config
