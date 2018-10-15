@@ -59,6 +59,10 @@
 
 #+END_SRC
 
+** Emacs Server
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (server-start)
+#+END_SRC
 ** Global keybindings
 #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -122,7 +126,8 @@
     :diminish
     :config
     (global-company-mode)
-    (setq company-idle-delay nil)
+    (setq company-idle-delay nil
+	  company-minimum-prefix-length 2)
     :bind
     ("TAB" . #'company-indent-or-complete-common))
 #+END_SRC
@@ -180,6 +185,7 @@
 	    clojure-mode
 	    cider-repl-mode
 	    racket-mode
+	    haskell-mode
 	    html-mode
 	    css-mode
 	    scss-mode) . paredit-mode)
@@ -187,16 +193,17 @@
 		("M-[" . paredit-wrap-square)
 		("M-{" . paredit-wrap-curly)))
 
-    (use-package paxedit
-      :delight
-      :hook ((org-mode
-	      emacs-lisp-mode
-	      clojure-mode
-	      cider-repl-mode
-	      racket-mode) . paxedit-mode)
-      :bind (:map paxedit-mode-map
-		  ("M-t" . 'paxedit-transpose-forward)
-		  ("C-M-t" . 'paxedit-transpose-backward)))
+  (use-package paxedit
+    :delight
+    :hook ((org-mode
+	    emacs-lisp-mode
+	    clojure-mode
+	    cider-repl-mode
+	    racket-mode
+	    haskell-mode) . paxedit-mode)
+    :bind (:map paxedit-mode-map
+		("M-t" . 'paxedit-transpose-forward)
+		("C-M-t" . 'paxedit-transpose-backward)))
 #+END_SRC
 ** Projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -267,7 +274,9 @@
       ;; Datomic
       (or-join 'defun)
       (not-join 'defun)
-      )
+      ;; Midje
+      (fact 'defun)
+      (facts 'defun))
     :bind
     ("C-c C-q" . cider-quit))
 
@@ -296,6 +305,15 @@
 
   (require 'flycheck-joker)
 #+END_SRC
+** Scala
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ensime
+    :config
+    (setq ensime-startup-notification nil)
+    :hook
+    (scala-mode . electric-pair-mode)
+    :pin melpa-stable)
+#+END_SRC
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp :tangle yes
 
@@ -303,6 +321,24 @@
     :ensure nil
     :delight emacs-lisp-mode "ξ")
 
+#+END_SRC
+** Haskell
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package haskell-mode
+    :hook
+    (haskell-mode . (lambda ()
+		      (company-mode 1)
+		      (set (make-local-variable 'company-backends)
+			   (append '((company-capf company-dabbrev-code))
+				   company-backends)))))
+#+END_SRC
+** JSON
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package json-mode
+    :hook
+    (json-mode . electric-pair-mode)
+    :config
+    (add-to-list 'auto-mode-alist '("\\.json\\.base\\'" . json-mode)))
 #+END_SRC
 ** Racket
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -419,4 +455,10 @@ First we define a function for recompiling our config when it changes:
     (ledger-mode . aggressive-indent-mode)
     )
 
+#+END_SRC
+* Private settings
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (let ((f (expand-file-name "private.el" user-emacs-directory)))
+    (when (file-exists-p f)
+      (load-file f)))
 #+END_SRC
