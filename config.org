@@ -129,7 +129,7 @@
     (setq company-idle-delay nil
 	  company-minimum-prefix-length 2)
     :bind
-    ("TAB" . #'company-indent-or-complete-common))
+    ("C-M-y" . #'company-indent-or-complete-common))
 #+END_SRC
 ** Better M-x
 #+BEGIN_SRC emacs-lisp :tangle yes
