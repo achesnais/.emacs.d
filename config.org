@@ -276,34 +276,37 @@
       (not-join 'defun)
       ;; Midje
       (fact 'defun)
-      (facts 'defun))
+      (facts 'defun)
+      ;; Selvage
+      (flow 'defun)
+      )
     :bind
     ("C-c C-q" . cider-quit))
 
-  (use-package cider
-    :pin melpa-stable
-    :hook
-    (cider-mode . eldoc-mode)
-    :config
-    (setq
-     cider-use-fringe-indicators nil
-     cider-repl-pop-to-buffer-on-connect 'display-only))
+    (use-package cider
+      :pin melpa-stable
+      :hook
+      (cider-mode . eldoc-mode)
+      :config
+      (setq
+       cider-use-fringe-indicators nil
+       cider-repl-pop-to-buffer-on-connect 'display-only))
 
-  (use-package clj-refactor
-    :pin melpa-stable
-    :delight
-    :after (clojure-mode yasnippet)
-    :config
-    (cljr-add-keybindings-with-prefix "C-c C-r")
-    :hook
-    (clj-refactor-mode . yas-minor-mode)
-    (clojure-mode . clj-refactor-mode))
+    (use-package clj-refactor
+      :pin melpa-stable
+      :delight
+      :after (clojure-mode yasnippet)
+      :config
+      (cljr-add-keybindings-with-prefix "C-c C-r")
+      :hook
+      (clj-refactor-mode . yas-minor-mode)
+      (clojure-mode . clj-refactor-mode))
 
-  (use-package flycheck-joker
-    :hook
-    (clojure-mode . flycheck-mode))
+    (use-package flycheck-joker
+      :hook
+      (clojure-mode . flycheck-mode))
 
-  (require 'flycheck-joker)
+    (require 'flycheck-joker)
 #+END_SRC
 ** Scala
 #+BEGIN_SRC emacs-lisp :tangle yes
