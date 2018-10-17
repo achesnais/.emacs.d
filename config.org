@@ -254,6 +254,12 @@
 
 #+END_SRC
 * Languages
+** Bash
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (add-hook #'sh-mode (lambda ()
+			(electric-pair-mode 1)))
+#+END_SRC
 ** Clojure
 #+BEGIN_SRC emacs-lisp :tangle yes
 
