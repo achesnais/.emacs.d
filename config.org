@@ -100,8 +100,8 @@
     (tool-bar-mode -1)                              ; Disable the tool bar
     (tooltip-mode -1)                               ; Disable the tooltips
     (toggle-frame-maximized)                        ; Maximise frame
-    (set-frame-font "Fira Code"))                   ; Set font
-
+    (set-frame-font "Fira Code 18")                 ; Set font
+    )
 #+END_SRC
 * Utilities
 ** Aggressive Indent
