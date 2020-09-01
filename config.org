@@ -39,7 +39,9 @@
    select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
    tab-width 4                                      ; Set width for tabs
    use-package-always-ensure t                      ; Avoid the :ensure keyword for each package
-   vc-follow-symlinks t)                            ; Always follow the symlinks
+   vc-follow-symlinks t                             ; Always follow the symlinks
+   create-lockfles nil                              ; Do not create lockfiles
+   )
   (cd "~/")                                         ; Move to the user directory
   (column-number-mode 1)                            ; Show the column number
   (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
@@ -176,6 +178,16 @@
     :after ivy
     :config (counsel-mode))
 #+END_SRC
+** Multi-cursor
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+  (use-package multiple-cursors
+    :diminish
+    :bind
+    ("C->" . 'mc/mark-next-like-this)
+    ("C-<" . 'mc/mark-previous-like-this)
+    ("C-c C-<" . 'mc/mark-all-like-this))
+#+END_SRC
 ** Parentheses
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package paredit
@@ -280,39 +292,34 @@
       ;; Datomic
       (or-join 'defun)
       (not-join 'defun)
-      ;; Midje
-      (fact 'defun)
-      (facts 'defun)
-      ;; Selvage
-      (flow 'defun)
       )
     :bind
     ("C-c C-q" . cider-quit))
 
-    (use-package cider
-      :pin melpa-stable
-      :hook
-      (cider-mode . eldoc-mode)
-      :config
-      (setq
-       cider-use-fringe-indicators nil
-       cider-repl-pop-to-buffer-on-connect 'display-only))
+  (use-package cider
+    ;; :pin melpa-stable
+    :hook
+    (cider-mode . eldoc-mode)
+    :config
+    (setq
+     cider-use-fringe-indicators nil
+     cider-repl-pop-to-buffer-on-connect 'display-only))
 
-    (use-package clj-refactor
-      :pin melpa-stable
-      :delight
-      :after (clojure-mode yasnippet)
-      :config
-      (cljr-add-keybindings-with-prefix "C-c C-r")
-      :hook
-      (clj-refactor-mode . yas-minor-mode)
-      (clojure-mode . clj-refactor-mode))
+  (use-package clj-refactor
+    ;; :pin melpa-stable
+    :delight
+    :after (clojure-mode yasnippet)
+    :config
+    (cljr-add-keybindings-with-prefix "C-c C-r")
+    :hook
+    (clj-refactor-mode . yas-minor-mode)
+    (clojure-mode . clj-refactor-mode))
 
-    (use-package flycheck-joker
-      :hook
-      (clojure-mode . flycheck-mode))
+  ;; (use-package flycheck-joker
+  ;;   :hook
+  ;;   (clojure-mode . flycheck-mode))
 
-    (require 'flycheck-joker)
+  ;; (require 'flycheck-joker)
 #+END_SRC
 ** Scala
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -371,6 +378,10 @@
     :hook
     (flycheck-mode . flycheck-rust-setup)
     )
+
+  (use-package cargo
+    :hook
+    (rust-mode . cargo-minor-mode))
 #+END_SRC
 ** Web
 *** HTML
