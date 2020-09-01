@@ -10,3 +10,6 @@ custom.el
 /smex-items
 /bookmarks
 /private.el
+/ede-projects.el
+/eshell/
+/transient/
